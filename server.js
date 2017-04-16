@@ -2,9 +2,20 @@ var express = require("express");
 var app = express();
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+    console.log(req.headers);
+    
+    //get headers
+    //Should set headers to null if results don't come back correctly.
+    var ip = null;
+    var language = null;
+    var os = null;
+    ip = req.headers["x-forwarded-for"];
+    language = req.headers["accept-language"].split(",")[0];
+    os = req.headers["user-agent"].split(/\(|\)/)[1];
+    
+    //make a JSON object
+    var result = {"ipaddress": ip, "language": language, "software": os};
+  res.send(result);
 });
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(8080);
